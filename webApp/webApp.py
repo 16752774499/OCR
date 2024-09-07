@@ -30,7 +30,7 @@ async def upload_file(file: UploadFile = File(...)):
             while content := await file.read(1024):  # 使用异步读取
                 file_object.write(content)
         # 返回响应
-        return JSONResponse(status_code=200, content={"message": "识别结果为：{0}".format(picORC(file_location))})
+        return JSONResponse(status_code=200, content={"message": picORC(file_location)})
 
 
 @app.get("/")
