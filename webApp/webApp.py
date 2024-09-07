@@ -1,13 +1,16 @@
 import os
 import uuid
-from venv import logger
 from fastapi import FastAPI, File, UploadFile
 from fastapi.responses import JSONResponse, FileResponse
+
 app = FastAPI()
 import ddddocr
+
 ocr = ddddocr.DdddOcr(beta=True)  # 切换为第二套ocr模型
 # 确保PIC目录存在
 os.makedirs("pic", exist_ok=True)
+
+
 @app.post("/upload/")
 async def upload_file(file: UploadFile = File(...)):
     # 判断文件后缀是否为图片
@@ -20,7 +23,7 @@ async def upload_file(file: UploadFile = File(...)):
         unique_filename = f"{uuid.uuid4()}.{file_extension}"
 
         # 定义文件的保存路径
-        file_location = f"webApp/pic/{unique_filename}"
+        file_location = f"./pic/{unique_filename}"
 
         # 异步写入文件
         with open(file_location, "wb+") as file_object:
@@ -36,6 +39,7 @@ async def main():
 
 
 def picORC(file_path: str) -> str:
+    print(file_path)
     image = open(file_path, "rb").read()
     result = ocr.classification(image)
     print(result)
