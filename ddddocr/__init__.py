@@ -12,8 +12,8 @@ from PIL import Image, ImageChops
 import numpy as np
 import cv2
 
-
 onnxruntime.set_default_logger_severity(3)
+
 
 def base64_to_image(img_base64):
     img_data = base64.b64decode(img_base64)
@@ -2594,7 +2594,6 @@ class DdddOcr(object):
         # 去重
         self.__charset_range = list(set(self.__charset_range)) + [""]
 
-
     def classification(self, img, png_fix: bool = False, probability=False):
         if self.det:
             raise TypeError("当前识别类型为目标检测")
@@ -2675,7 +2674,7 @@ class DdddOcr(object):
                                 probability_result_index.append(-1)
                         probability_result = []
                         for item in ort_outs_probability:
-                            probability_result.append([item[i] if i != -1 else -1 for i in probability_result_index ])
+                            probability_result.append([item[i] if i != -1 else -1 for i in probability_result_index])
                         result['probability'] = probability_result
                     return result
                 else:

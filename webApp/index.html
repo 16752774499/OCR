@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>File Upload Example</title>
+</head>
+<body>
+
+<h2>Upload a file</h2>
+
+<!-- 文件上传表单 -->
+<form id="file-upload-form">
+    <input type="file" name="file" id="file-input" required>
+    <button type="submit">Upload</button>
+</form>
+
+<!-- 显示服务器返回的消息 -->
+<div id="message"></div>
+
+<script>
+// 当文档加载完毕时绑定事件
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('file-upload-form');
+    form.onsubmit = async function(event) {
+        event.preventDefault(); // 阻止表单默认提交行为
+
+        const fileInput = document.getElementById('file-input');
+        const file = fileInput.files[0]; // 获取用户选择的文件
+
+        if (!file) {
+            alert('Please select a file to upload!');
+            return;
+        }
+
+        // 创建FormData对象并添加文件
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            // 发送POST请求到服务器上传文件
+            const response = await fetch('/upload/', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                // 解析JSON响应并获取消息
+                const data = await response.json();
+                document.getElementById('message').textContent = data.message;
+            } else {
+                throw new Error('Server responded with status outside the range of 200-299');
+            }
+        } catch (error) {
+            // 在控制台打印错误并显示错误消息
+            console.error(error);
+            document.getElementById('message').textContent = 'Error uploading file';
+        }
+    };
+});
+</script>
+
+</body>
+</html>
